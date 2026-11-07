@@ -1,12 +1,12 @@
 import BellIcon from './BellIcon';
-import './Footer.css';
+import './Header.css';
 import UserIcon from './UserIcon';
 
-export const Footer = () => {
+export const Header = () => {
   return (
   <>
 
- <div className='footer'>
+ <div className='header'>
   <div className='logobox'>
    <img src="Picora_logo.png" className ="logo" alto='logo'/>
    <h1 className='logoText'>Picora </h1>

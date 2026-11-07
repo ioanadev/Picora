@@ -15,7 +15,7 @@
   max-width: calc(100vw - 58px);
   max-height: calc(100vh - 34px);
 }
-/*.modal-image {
-  width: 90%;
-  height: 90%;
-}*/
+.modal-image {
+  /* width: 60%; */
+  height: 60%;
+}

@@ -2,6 +2,7 @@ import './Modal.css';
 
 // Componenta Modal
 export const Modal = ({ image, onClose }) => {
+  
   const handleKeyDown = event => {
     if (event.key === 'Escape') {
       onClose();
@@ -22,7 +23,7 @@ export const Modal = ({ image, onClose }) => {
       tabIndex={0}
     >
       <div className="modal">
-        <img src={image.largeImageURL} alt="" className="modal-image" />
+        <img src={image.largeImageURL} alt={image.heading} className="modal-image" />
       </div>
     </div>
   );
