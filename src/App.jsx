@@ -1,13 +1,12 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Searchbar } from './components/Searchbar/Searchbar';
 import { ImageGallery } from './components/ImageGallery/ImageGallery';
 import { Button } from './components/ButtonLoadMore/ButtonLoadMore';
 import { Loader } from './components/Loader/Loader';
 import { Modal } from './components/Modal/Modal';
 import './App.css';
-// import { API_KEY, BASE_URL } from '../gitignore';
-import { API_KEY, BASE_URL } from './components/Api/Api';
+import { BASE_URL, API_KEY } from './components/Api/Api';
 import { Header } from './components/Header/Header';
 import { Menu } from './components/Menu/Menu';
 import { Main } from './components/Main/Main';
@@ -21,48 +20,81 @@ export const App = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  const [totalHits, setTotalHits] = useState(0);
+  const loaderRef = useRef(null)
 
+
+  // ##UseEfect pt cereri API######
   useEffect(() => {
     const fetchImages = () => {
       const params = {
         page,
         key:API_KEY,
-        image_type:imageType,
-        // orientation: 'horizontal',
+        image_type: searchQuery ? 'all' : imageType,
         per_page: '12',
       }
       if (searchQuery) {
         params.q =searchQuery;
       }
-      // const url =(BASE_URL, { params })
-      // `${BASE_URL}?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`;
-//  console.log("URL: ", url)
       setLoading(true);
       axios
-        // .get(url)
         .get(BASE_URL, { params })
         .then(response => {
+         
+          console.log("Response", response);
+          setTotalHits(response.data.totalHits);
           if (page===1) {
-          setImages(response.data.hits)
-          setLoading(false);
+           setImages(response.data.hits);
+           setLoading(false);
           }else {
-          setImages(prevImages => [...prevImages, ...response.data.hits]); 
-          setLoading(false);
+           setImages(prevImages => [...prevImages, ...response.data.hits]); 
+           setLoading(false);
           }
           
           // setImages(prevImages => [...prevImages, ...response.data.hits]);  // data.hits
           // setLoading(false);
-          console.log("Response:", response.data.hits)
+          // console.log("Response:", response.data.hits)
         })
         .catch(error => {
           setError(error.message);
           setLoading(false);
         });
-      
+          
     };
 
     fetchImages();
   }, [searchQuery, page, imageType]);
+
+
+// ##UseEfect pt determinarea elementului vizibil cu IntersectionObserver######
+  useEffect(() => {
+  const element = loaderRef.current;
+
+  if (!element || loading || images.length >= totalHits) {
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    entries => {
+      if (entries[0].isIntersecting) {
+        observer.unobserve(element);
+        setPage(prevPage => prevPage + 1);
+      }
+    },
+    {
+      threshold: 0,
+    }
+  );
+
+  observer.observe(element);
+
+  return () => {
+    observer.disconnect();
+  };
+}, [loading, images.length, totalHits]);
+
+
+
 
   const handleSearchSubmit = searchQuery => {
     setSearchQuery(searchQuery);
@@ -83,21 +115,29 @@ export const App = () => {
     setShowModal(false);
     setSelectedImage(null);
   };
-
+const handleTypeClick=(type)=>{
+  setImageType(type);
+  setPage(1);
+ }
 //  console.log(images);
   return (
     <>
     <Header/>
     <Main>
       <Searchbar onSubmit={handleSearchSubmit} />
-      <Menu types={["all", "photo", "illustration", "vector"]} />
+      <Menu 
+        imageTypes={["all", "photo", "illustration", "vector"]} 
+        onClick ={handleTypeClick}
+        activeType={imageType}
+      />
       <div className="app">
-       {loading && <Loader />}
-       {error && <div>Error: {error}</div>}
-       <ImageGallery images={images} onOpenModal={handleOpenModal}  />
-       {images.length > 0 && <Button onClick={handleLoadMore} />}
-       {showModal && selectedImage && (<Modal image={selectedImage} onClose={handleCloseModal}  />)}
+        {loading && <Loader />}
+        {error && <div>Error: {error}</div>}
+        <ImageGallery images={images} onOpenModal={handleOpenModal}  />
+        {/* {images.length > 0 && <Button onClick={handleLoadMore} />}   */}
+        {showModal && selectedImage && (<Modal image={selectedImage} onClose={handleCloseModal}  />)}
       </div>
+    <div ref={loaderRef}></div>
     </Main>
     
     </>

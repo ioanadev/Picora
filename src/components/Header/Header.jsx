@@ -8,7 +8,7 @@ export const Header = () => {
 
  <div className='header'>
   <div className='logobox'>
-   <img src="Picora_logo.png" className ="logo" alto='logo'/>
+   <img src="logo_picora2.png" className ="logo" alto='logo'/>
    <h1 className='logoText'>Picora </h1>
   </div>
 
