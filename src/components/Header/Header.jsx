@@ -16,8 +16,13 @@ export const Header = () => {
    
    <p className='meniu'> Explore</p>
    <p className='meniu'>Collections</p>
-  <BellIcon className='icon'/>
-  <UserIcon className='icon'/>
+    <div class="iconbox">
+       <svg class="icon-user" width={20} height={20}><use href="user.svg"></use></svg>
+       <svg class="icon-notification" width={20} height={20}><use href="notification.svg"></use></svg>
+    </div>
+
+  {/* <BellIcon className='icon'/>
+  <UserIcon className='icon'/> */}
   
    </div>
 
