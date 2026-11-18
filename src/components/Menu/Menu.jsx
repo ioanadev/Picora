@@ -1,14 +1,11 @@
 import './Menu.css'
 
-
-
 // Componenta Menu
 
 export const Menu = ({ imageTypes, onClick, activeType }) => {
 const handleClick =(e)=>{
 onClick(e.currentTarget.value);
 }
-
   return (
     <div className ="menu">
       {imageTypes.map(imageType=>

@@ -1,9 +1,4 @@
-/* .gallery-item {
-  border-radius: 20px;
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-     0px 2px 1px -1px rgba(0, 0, 0, 0.12); 
-    background-color: blueviolet;
-} */
+
 
 .gallery-item-image {
   border-radius: 20px;
@@ -11,34 +6,10 @@
   display: block;
   object-fit: cover;
   transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  /* position:relative; */
   cursor: pointer;
-  /* overflow: hidden; */
+
 }
 
 .group:hover {
   transform: scale(1.03);
  }
-/* .textbox{ */
-  /* position:absolute;
-  overflow: hidden; */
-  /* cursor: pointer; */
-  /* background-color: blue;
-  z-index: 5;
-  position:absolute; */
-  /* bottom: 0; */
-  /* translate: 100% var(--tw-translate-y); */
-
-  /* } */
-/* .textbox{
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
- 
-  /* z-index: 5;
-  background-color: brown;
-  position: absolute;
-  width: 40%;
-  border-radius: 20px;
-  bottom: 15px; 
-} */

@@ -12,36 +12,34 @@ import { Menu } from './components/Menu/Menu';
 import { Main } from './components/Main/Main';
 
 export const App = () => {
-  const [images, setImages] = useState([]);
-  const [imageType, setImageType] = useState('all')
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [page, setPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [totalHits, setTotalHits] = useState(0);
-  const loaderRef = useRef(null)
+const [images, setImages] = useState([]);
+const [imageType, setImageType] = useState('all')
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState(null);
+const [showModal, setShowModal] = useState(false);
+const [selectedImage, setSelectedImage] = useState(null);
+const [page, setPage] = useState(1);
+const [searchQuery, setSearchQuery] = useState('');
+const [totalHits, setTotalHits] = useState(0);
+const loaderRef = useRef(null)
 
-console.log(API_KEY);
+
   // ##UseEfect pt cereri API######
-  useEffect(() => {
-    const fetchImages = () => {
-      const params = {
-        page,
-        key:API_KEY,
-        image_type: searchQuery ? 'all' : imageType,
-        per_page: '12',
-      }
+useEffect(() => {
+  const fetchImages = () => {
+    const params = {
+      page,
+      key:API_KEY,
+      image_type: searchQuery ? 'all' : imageType,
+      per_page: '12',
+    }
       if (searchQuery) {
         params.q =searchQuery;
       }
       setLoading(true);
       axios
         .get(BASE_URL, { params })
-        .then(response => {
-         
-          console.log("Response", response);
+        .then(response => { 
           setTotalHits(response.data.totalHits);
           if (page===1) {
            setImages(response.data.hits);
@@ -50,30 +48,22 @@ console.log(API_KEY);
            setImages(prevImages => [...prevImages, ...response.data.hits]); 
            setLoading(false);
           }
-          
-          // setImages(prevImages => [...prevImages, ...response.data.hits]);  // data.hits
-          // setLoading(false);
-          // console.log("Response:", response.data.hits)
         })
         .catch(error => {
           setError(error.message);
           setLoading(false);
         });
-          
-    };
-
+ };
     fetchImages();
-  }, [searchQuery, page, imageType]);
+}, [searchQuery, page, imageType]);
 
 
-// ##UseEfect pt determinarea elementului vizibil cu IntersectionObserver######
+ // ##UseEfect pt determinarea elementului vizibil cu IntersectionObserver######
   useEffect(() => {
   const element = loaderRef.current;
-
   if (!element || loading || images.length >= totalHits) {
     return;
   }
-
   const observer = new IntersectionObserver(
     entries => {
       if (entries[0].isIntersecting) {
@@ -85,16 +75,11 @@ console.log(API_KEY);
       threshold: 0,
     }
   );
-
   observer.observe(element);
-
   return () => {
     observer.disconnect();
   };
-}, [loading, images.length, totalHits]);
-
-
-
+ }, [loading, images.length, totalHits]);
 
   const handleSearchSubmit = searchQuery => {
     setSearchQuery(searchQuery);
@@ -115,11 +100,10 @@ console.log(API_KEY);
     setShowModal(false);
     setSelectedImage(null);
   };
-const handleTypeClick=(type)=>{
+  const handleTypeClick=(type)=>{
   setImageType(type);
   setPage(1);
  }
-//  console.log(images);
   return (
     <>
     <Header/>
@@ -134,12 +118,10 @@ const handleTypeClick=(type)=>{
         {loading && <Loader />}
         {error && <div>Error: {error}</div>}
         <ImageGallery images={images} onOpenModal={handleOpenModal}  />
-        {/* {images.length > 0 && <Button onClick={handleLoadMore} />}   */}
         {showModal && selectedImage && (<Modal image={selectedImage} onClose={handleCloseModal}  />)}
       </div>
     <div ref={loaderRef}></div>
     </Main>
-    
     </>
   );
 };
