@@ -23,7 +23,7 @@ export const App = () => {
   const [totalHits, setTotalHits] = useState(0);
   const loaderRef = useRef(null)
 
-
+console.log(API_KEY);
   // ##UseEfect pt cereri API######
   useEffect(() => {
     const fetchImages = () => {
