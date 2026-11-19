@@ -81,29 +81,36 @@ useEffect(() => {
   };
  }, [loading, images.length, totalHits]);
 
+
   const handleSearchSubmit = searchQuery => {
     setSearchQuery(searchQuery);
     setPage(1);
     setImages([]);
   };
 
-  const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
-  };
+  // const handleLoadMore = () => {
+  //   setPage(prevPage => prevPage + 1);
+  // };
+
 
   const handleOpenModal = image => {
     setShowModal(true);
     setSelectedImage(image);
   };
 
+
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedImage(null);
   };
+
+
   const handleTypeClick=(type)=>{
   setImageType(type);
   setPage(1);
  }
+
+ 
   return (
     <>
     <Header/>
